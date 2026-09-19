@@ -3,12 +3,14 @@ import { FilterBar } from './components/FilterBar'
 import { TaskForm } from './components/TaskForm'
 import { TaskList } from './components/TaskList'
 import { useTasks } from './hooks/useTasks'
+import { useTheme } from './hooks/useTheme'
 import type { Priority, SortKey, StatusFilter } from './types'
 import { sortTasks } from './utils/sort'
 import styles from './App.module.css'
 
 function App() {
   const { tasks, addTask, updateTask, deleteTask, toggleComplete } = useTasks()
+  const { theme, toggleTheme } = useTheme()
   const [status, setStatus] = useState<StatusFilter>('all')
   const [priority, setPriority] = useState<Priority | 'all'>('all')
   const [tag, setTag] = useState('all')
@@ -39,6 +41,14 @@ function App() {
   return (
     <div className={styles.app}>
       <header className={styles.header}>
+        <button
+          type="button"
+          className={styles.themeToggle}
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+        </button>
         <h1>Daily Tasks</h1>
         <p className={styles.subtitle}>
           {remaining} {remaining === 1 ? 'task' : 'tasks'} remaining
