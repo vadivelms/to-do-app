@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Dashboard } from './components/Dashboard'
 import { FilterBar } from './components/FilterBar'
 import { TaskForm } from './components/TaskForm'
 import { TaskList } from './components/TaskList'
@@ -6,6 +7,7 @@ import { useTasks } from './hooks/useTasks'
 import { useTheme } from './hooks/useTheme'
 import type { Priority, SortKey, StatusFilter } from './types'
 import { sortTasks } from './utils/sort'
+import { computeStats } from './utils/stats'
 import styles from './App.module.css'
 
 function App() {
@@ -37,6 +39,7 @@ function App() {
   }, [tasks, status, priority, tag, sortKey])
 
   const remaining = tasks.filter((task) => !task.completed).length
+  const stats = useMemo(() => computeStats(tasks), [tasks])
 
   return (
     <div className={styles.app}>
@@ -54,6 +57,8 @@ function App() {
           {remaining} {remaining === 1 ? 'task' : 'tasks'} remaining
         </p>
       </header>
+
+      <Dashboard stats={stats} />
 
       <TaskForm onSubmit={addTask} />
 
